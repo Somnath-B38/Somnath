@@ -1,0 +1,64 @@
+
+CHCART00 Table Dynamic Query:- 
+let
+    Source = DB2.Database(#"Server Instances", #"Database Details", [HierarchicalNavigation=true, Implementation="Microsoft", 
+    Query="Select * From DDCMSF.CHCART00 Where CHUPDT='"&StartDate&"'And CHUPDT = '"&EndDate&"'"])
+in
+    Source
+
+
+THTOTE00 Table Dynamic Query:-
+let
+    Source = DB2.Database(#"Server Instances", #"Database Details", [HierarchicalNavigation=true, Implementation="Microsoft", 
+    Query="Select * From DDCMSF.THTOTE00 Where THRLDT='"&StartDate&"'And THRLDT = '"&EndDate&"'"])
+in
+    Source
+
+
+
+CUCUST00 Table Dynamic Query:- 
+let
+    Source = DB2.Database(#"Server Instances", #"Database Details", [HierarchicalNavigation=true, Implementation="Microsoft", 
+    Query="Select * From DDCMSF.CUCUST00 Where CUUPDT='"&StartDate&"'And CUUPDT = '"&EndDate&"'"])
+in
+    Source
+
+
+THTOTE00 Regular Query:- 
+let
+    Source = DB2.Database("10.17.0.43:446", "HDEV", [HierarchicalNavigation=true, Implementation="Microsoft"]),
+    DDCMSF = Source{[Schema="DDCMSF"]}[Data],
+    THTOTE1 = DDCMSF{[Name="THTOTE00"]}[Data]
+in
+    THTOTE1
+
+
+Query For Date Slicer from Query Parameter:- 
+Select 
+VARCHAR_FORMAT( TIMESTAMP_FORMAT(cast(CHUPDT as varchar(8)), 'YYYYMMDD') , 'MMDDYYYY') 
+from DDCMSF.CHCART00
+
+
+Source = DB2.Database("10.17.0.43:446", "HDEV", [HierarchicalNavigation=true, Implementation="Microsoft"
+Query="Select #(lf)VARCHAR_FORMAT( TIMESTAMP_FORMAT(cast(CHUPDT as varchar(8)), 'YYYYMMDD') , 'MMDDYYYY') 
+    #(lf)from DDCMSF.CHCART00"])
+
+
+let
+    Source = DB2.Database(#"Server Instances", #"Database Details", [HierarchicalNavigation=true, Implementation="Microsoft", 
+    Query="Select * From DDCMSF.THTOTE00 Where THRLDT='"&StartDate&"'And THRLDT = '"&EndDate&"'
+    And THTOID Like ('999%')"])
+in
+    Source
+
+
+
+let
+    Source = DB2.Database("10.17.0.43:446", "HDEV", [HierarchicalNavigation=true, Implementation="Microsoft"]),
+    DDCMSF = Source{[Schema="DDCMSF"]}[Data],
+    CHCART1 = DDCMSF{[Name="CHCART00"]}[Data],
+    #"Sorted Rows" = Table.Sort(CHCART1,{{"CHUPDT", Order.Descending}}),
+    #"Filtered Rows" = Table.SelectRows(#"Sorted Rows", each [CHUPDT] = 20200131 and [CHUPDT] = 20200131)
+in
+    #"Filtered Rows"
+

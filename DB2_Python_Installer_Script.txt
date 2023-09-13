@@ -1,0 +1,27 @@
+import pandas as pd
+dsn_driver = "iSeries Access ODBC Driver"
+dsn_database = "S065B975"
+dsn_hostname= "172.16.100.50" 
+dsn_port="446"
+dsn_protocol="TCPIP"
+dsn_uid="GKIRAN"
+dsn_pwd="kiran123"
+
+dsn = (
+    "DRIVER={{IBM DB2 ODBC DRIVER}};"
+    "DATABASE={0};"
+    "HOSTNAME={1};"
+    "PORT={2};"
+    "PROTOCOL=TCPIP;"
+    "UID={3};"
+    "PWD={4};").format(dsn_database, dsn_hostname, dsn_port, dsn_uid, dsn_pwd)
+
+try:
+    conn = ibm_db.connect(dsn, "", "")
+    print('Connected')
+except:
+    print('Unable to connect to database', dsn)
+
+import pandas as pd
+df = pd.DataFrame
+df

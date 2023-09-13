@@ -1,0 +1,11 @@
+SELECT min(thupdt),min(thuptm),thdtid 
+
+   FROM thtote00   WHERE              
+
+THUPDT = 20200224 and thdtid like 'CS%'
+
+group BY thdtid                       
+
+order by min(thupdt),min(thuptm)     
+
+Date = MONTH(DATE(CHCART00[CHUPDT]))&"/"&DAY(DATE(CHCART00[CHUPDT]))&"/"Y
